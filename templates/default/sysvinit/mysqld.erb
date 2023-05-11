@@ -21,7 +21,7 @@
 # http://refspecs.linuxbase.org/LSB_3.1.0/LSB-Core-generic/LSB-Core-generic/iniscrptact.html
 
 # Source functions
-<% if node['platform_family'] == 'rhel' %>
+<% if node['platform_family'] == 'rhel' || node['platform_family'] == 'amazon' %>
 # Source RHEL function library.
 . /etc/rc.d/init.d/functions
 <% end %>
@@ -85,7 +85,7 @@ print_start_success() {
 }
 
 print_start_failure() {
-    <% if node['platform_family'] == 'rhel' %>
+    <% if node['platform_family'] == 'rhel' || node['platform_family'] == 'amazon' %>
     action $"Starting <%= @mysql_name %>: " /bin/false
     <% else %>
     echo "Could not start MySQL instance <%= @mysql_name %>"
@@ -94,7 +94,7 @@ print_start_failure() {
 }
 
 print_reload_success() {
-    <% if node['platform_family'] == 'rhel' %>
+    <% if node['platform_family'] == 'rhel' || node['platform_family'] == 'amazon' %>
     action $"Reloading <%= @mysql_name %>" /bin/true
     <% else %>
     echo "Reload success for <%= @mysql_name %>"
@@ -103,7 +103,7 @@ print_reload_success() {
 }
 
 print_reload_failure() {
-    <% if node['platform_family'] == 'rhel' %>
+    <% if node['platform_family'] == 'rhel' || node['platform_family'] == 'amazon' %>
     action $"Reloading <%= @mysql_name %>" /bin/false
     <% else %>
     echo "Reload failed for <%= @mysql_name %>"
@@ -112,7 +112,7 @@ print_reload_failure() {
 }
 
 print_stop_success() {
-    <% if node['platform_family'] == 'rhel' %>
+    <% if node['platform_family'] == 'rhel' || node['platform_family'] == 'amazon' %>
     action $"Stopping <%= @mysql_name %>: " /bin/true
     <% else %>
     echo "Stopping MySQL instance <%= @mysql_name %>"
@@ -121,7 +121,7 @@ print_stop_success() {
 }
 
 print_stop_failure() {
-    <% if node['platform_family'] == 'rhel' %>
+    <% if node['platform_family'] == 'rhel' || node['platform_family'] == 'amazon' %>
     action $"Stopping <%= @mysql_name %>: " /bin/false
     <% else %>
     echo "Could not stop MySQL instance <%= @mysql_name %>"
