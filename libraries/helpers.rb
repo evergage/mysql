@@ -3,12 +3,12 @@ module MysqlCookbook
     require 'shellwords'
 
     def el6?
-      return true if platform_family?('rhel') && node['platform_version'].to_i == 6
+      return true if (platform_family?('rhel') || platform_family?('amazon')) && node['platform_version'].to_i == 6
       false
     end
 
     def el7?
-      return true if platform_family?('rhel') && node['platform_version'].to_i == 7
+      return true if (platform_family?('rhel') || platform_family?('amazon'))  && node['platform_version'].to_i == 7
       false
     end
 
@@ -132,7 +132,7 @@ module MysqlCookbook
     end
 
     def run_dir
-      return "#{prefix_dir}/var/run/#{mysql_name}" if platform_family?('rhel') || platform_family?('rhel')
+      return "#{prefix_dir}/var/run/#{mysql_name}" if platform_family?('rhel') || platform_family?('amazon')
       return "/run/#{mysql_name}" if platform_family?('debian')
       "/var/run/#{mysql_name}"
     end
@@ -144,13 +144,13 @@ module MysqlCookbook
     end
 
     def scl_name
-      return unless platform_family?('rhel') || platform_family?('rhel')
+      return unless platform_family?('rhel') || platform_family?('amazon')
       return 'mysql51' if version == '5.1' && node['platform_version'].to_i == 5
       return 'mysql55' if version == '5.5' && node['platform_version'].to_i == 5
     end
 
     def scl_package?
-      return unless platform_family?('rhel') || platform_family?('rhel')
+      return unless platform_family?('rhel') || platform_family?('amazon')
       return true if version == '5.1' && node['platform_version'].to_i == 5
       return true if version == '5.5' && node['platform_version'].to_i == 5
       false
@@ -167,9 +167,9 @@ module MysqlCookbook
     end
 
     def system_service_name
-      return 'mysql51-mysqld' if (platform_family?('rhel') || platform_family?('rhel')) && scl_name == 'mysql51'
-      return 'mysql55-mysqld' if (platform_family?('rhel') || platform_family?('rhel')) && scl_name == 'mysql55'
-      return 'mysqld' if platform_family?('rhel') || platform_family?('rhel')
+      return 'mysql51-mysqld' if (platform_family?('rhel') || platform_family?('amazon')) && scl_name == 'mysql51'
+      return 'mysql55-mysqld' if (platform_family?('rhel') || platform_family?('amazon')) && scl_name == 'mysql55'
+      return 'mysqld' if platform_family?('rhel') || platform_family?('amazon')
       return 'mysqld' if platform_family?('fedora')
       'mysql' # not one of the above
     end
@@ -289,7 +289,7 @@ EOSQL
 
     def mysql_systemd_start_pre
       return '/usr/bin/mysqld_pre_systemd' if v57plus && (el7? || fedora?)
-      return '/usr/bin/mysql-systemd-start pre' if platform_family?('rhel') || platform_family?('rhel')
+      return '/usr/bin/mysql-systemd-start pre' if platform_family?('rhel') || platform_family?('amazon')
       return '/usr/lib/mysql/mysql-systemd-helper install' if suse?
       '/usr/share/mysql/mysql-systemd-start pre'
     end
